@@ -3,22 +3,41 @@
 // Created by Jerome Hsieh on 2019/9/18.
 
 import Foundation
+import os
 
 enum LogLevel: Int, CustomStringConvertible {
   var description: String {
     switch self {
+    case .fault:
+      return "❌ Fatal"
     case .error:
       return "‼️ Error"
-    case .warning:
-      return "⚠️ Warning"
     case .debug:
       return "🐌 Debug"
     case .info:
       return "📗 Info"
+    case .defaultLevel:
+      return "🍋 Default"
     }
   }
 
-  case error, warning, debug, info
+  case fault, error, debug, info, defaultLevel
+  
+  var theOSLogType: OSLogType {
+    switch self {
+    case .fault:
+      return .fault
+    case .error:
+      return .error
+    case .debug:
+      return .debug
+    case .info:
+      return .info
+    case .defaultLevel:
+      return .default
+    }
+  }
+  
 }
 
 #if TEST
@@ -27,10 +46,16 @@ enum LogLevel: Int, CustomStringConvertible {
   let logger = AdvancedLogger() // APP Target 用這個，此包含 UI 和 Log 檔案儲存。
 #endif
 
+struct Log {
+  // TODO: 根據需要進行修改。
+  static let subsystem = "me.jerome.Mod"
+  static let table = OSLog(subsystem: subsystem, category: "table")
+  static let networking = OSLog(subsystem: subsystem, category: "networking")
+}
+
 class BaseLogger {
   // MARK: - Properties
 
-  private(set) var logLevels = [LogLevel]()
   private(set) var shouldShow = false
   private(set) var shouldCache = false
 
@@ -38,32 +63,29 @@ class BaseLogger {
 
   // MARK: - Public method
 
-  func configure(_ logLevels: [LogLevel], shouldShow: Bool = false, shouldCache: Bool = false) {
-    self.logLevels = logLevels
+  func configure(shouldShow: Bool = false, shouldCache: Bool = false) {
     self.shouldShow = shouldShow
     self.shouldCache = shouldCache
   }
 
   func log(_ items: Any,
+           theOSLog: OSLog = Log.table,
            level: LogLevel = .info,
            file: String = #file,
            function: String = #function,
            line: Int = #line) {
     #if DEBUG
-      if logLevels.contains(level) {
-        let currentDateString = Date().toString()
-        let fileName = file.components(separatedBy: "/").last?.components(separatedBy: ".").first ?? ""
-        let logString = "⭐️ [\(currentDateString)][\(level.description)] [\(fileName).\(function):\(line)] > \(items)"
+      let fileName = file.components(separatedBy: "/").last?.components(separatedBy: ".").first ?? ""
+      let logString = "⭐️ [\(level.description)] [\(fileName).\(function):\(line)] > \(items)"
 
-        print(logString)
+      os_log("%@", log: theOSLog, type: level.theOSLogType, logString)
 
-        if shouldShow {
-          show(logString)
-        }
+      if shouldShow {
+        show(logString)
+      }
 
-        if shouldCache {
-          cache(logString)
-        }
+      if shouldCache {
+        cache(logString)
       }
     #endif
   }
