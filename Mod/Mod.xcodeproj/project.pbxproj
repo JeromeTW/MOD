@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		020D16162338A2B00017E7CC /* BaseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 020D16152338A2B00017E7CC /* BaseView.swift */; };
 		026447452327CF6200822485 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 026447442327CF6200822485 /* AppDelegate.swift */; };
 		026447472327CF6200822485 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 026447462327CF6200822485 /* ViewController.swift */; };
 		0264474A2327CF6200822485 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 026447482327CF6200822485 /* Main.storyboard */; };
@@ -55,6 +56,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		020D16152338A2B00017E7CC /* BaseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseView.swift; sourceTree = "<group>"; };
 		026447412327CF6200822485 /* Mod.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Mod.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		026447442327CF6200822485 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		026447462327CF6200822485 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -220,6 +222,7 @@
 			children = (
 				02BEA1DF2331D64D00C3E317 /* UI */,
 				02BEA1E22331D64D00C3E317 /* BaseViewController.swift */,
+				020D16152338A2B00017E7CC /* BaseView.swift */,
 				02BEA1E32331D64D00C3E317 /* Observable.swift */,
 			);
 			path = Base;
@@ -499,6 +502,7 @@
 				02BEA1E82331D64D00C3E317 /* NSObjectExtension.swift in Sources */,
 				02BEA1E52331D64D00C3E317 /* AdvancedLogger.swift in Sources */,
 				02BEA1EA2331D64D00C3E317 /* CGFloatExtension.swift in Sources */,
+				020D16162338A2B00017E7CC /* BaseView.swift in Sources */,
 				02BEA1D32331D62800C3E317 /* APIRequest.swift in Sources */,
 				026447452327CF6200822485 /* AppDelegate.swift in Sources */,
 				02F9972423346DFE00EE21CA /* Coordinator.swift in Sources */,
@@ -725,7 +729,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/NewProject.app/NewProject";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Mod.app/Mod";
 			};
 			name = Debug;
 		};
@@ -747,7 +751,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/NewProject.app/NewProject";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Mod.app/Mod";
 			};
 			name = Release;
 		};
