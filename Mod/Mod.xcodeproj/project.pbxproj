@@ -8,6 +8,9 @@
 
 /* Begin PBXBuildFile section */
 		020D16162338A2B00017E7CC /* BaseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 020D16152338A2B00017E7CC /* BaseView.swift */; };
+		020D16192338F5D60017E7CC /* Movie.swift in Sources */ = {isa = PBXBuildFile; fileRef = 020D16182338F5D60017E7CC /* Movie.swift */; };
+		020D161B2338FC240017E7CC /* MovieCodableTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 020D161A2338FC240017E7CC /* MovieCodableTests.swift */; };
+		020D161C2338FCC20017E7CC /* Movie.swift in Sources */ = {isa = PBXBuildFile; fileRef = 020D16182338F5D60017E7CC /* Movie.swift */; };
 		026447452327CF6200822485 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 026447442327CF6200822485 /* AppDelegate.swift */; };
 		026447472327CF6200822485 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 026447462327CF6200822485 /* ViewController.swift */; };
 		0264474A2327CF6200822485 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 026447482327CF6200822485 /* Main.storyboard */; };
@@ -57,6 +60,8 @@
 
 /* Begin PBXFileReference section */
 		020D16152338A2B00017E7CC /* BaseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseView.swift; sourceTree = "<group>"; };
+		020D16182338F5D60017E7CC /* Movie.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Movie.swift; sourceTree = "<group>"; };
+		020D161A2338FC240017E7CC /* MovieCodableTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieCodableTests.swift; sourceTree = "<group>"; };
 		026447412327CF6200822485 /* Mod.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Mod.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		026447442327CF6200822485 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		026447462327CF6200822485 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -119,6 +124,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		020D16172338F5C40017E7CC /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				020D16182338F5D60017E7CC /* Movie.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
 		026447382327CF6200822485 = {
 			isa = PBXGroup;
 			children = (
@@ -142,6 +155,7 @@
 		026447432327CF6200822485 /* Mod */ = {
 			isa = PBXGroup;
 			children = (
+				020D16172338F5C40017E7CC /* Models */,
 				02F9972023346DFE00EE21CA /* Coordinator */,
 				02BEA1D42331D64C00C3E317 /* Log */,
 				02BEA1D82331D64D00C3E317 /* Utils */,
@@ -242,6 +256,7 @@
 			children = (
 				02BEA1F82331DA4200C3E317 /* ImageLoaderTests.swift */,
 				02BEA1FA2331DA4200C3E317 /* Info.plist */,
+				020D161A2338FC240017E7CC /* MovieCodableTests.swift */,
 			);
 			path = ImageLoaderTests;
 			sourceTree = "<group>";
@@ -491,6 +506,7 @@
 				02BEA1D12331D62800C3E317 /* NetworkRequestOperation.swift in Sources */,
 				02BEA1C82331D5F700C3E317 /* CoreDataConnect.swift in Sources */,
 				026447472327CF6200822485 /* ViewController.swift in Sources */,
+				020D16192338F5D60017E7CC /* Movie.swift in Sources */,
 				02BEA1ED2331D64D00C3E317 /* JeromeNavigationBar.swift in Sources */,
 				02BEA1CC2331D61100C3E317 /* ImageLoader.swift in Sources */,
 				02BEA1EF2331D64D00C3E317 /* BaseViewController.swift in Sources */,
@@ -518,11 +534,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				020D161B2338FC240017E7CC /* MovieCodableTests.swift in Sources */,
 				02BEA1F92331DA4200C3E317 /* ImageLoaderTests.swift in Sources */,
 				02BEA2042331DAB300C3E317 /* BaseLogger.swift in Sources */,
 				02BEA2052331DB1500C3E317 /* ImageLoader.swift in Sources */,
 				02BEA2012331DA8F00C3E317 /* NetworkRequestOperation.swift in Sources */,
 				02BEA2032331DA9300C3E317 /* APIRequest.swift in Sources */,
+				020D161C2338FCC20017E7CC /* Movie.swift in Sources */,
 				02BEA2022331DA9100C3E317 /* AsynchronousOperation.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
