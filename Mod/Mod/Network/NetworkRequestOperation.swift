@@ -52,5 +52,6 @@ class NetworkRequestOperation: AsynchronousOperation {
     logger.log("task.resume()\n")
     task!.resume()
     startDate = Date()
+    super.main()
   }
 }
