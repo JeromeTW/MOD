@@ -53,6 +53,7 @@ struct Log {
   static let networking = OSLog(subsystem: subsystem, category: "networking")
   static let test = OSLog(subsystem: subsystem, category: "test")
   static let image = OSLog(subsystem: subsystem, category: "image")
+  static let defaultLog = OSLog(subsystem: subsystem, category: "default")
 }
 
 class BaseLogger {
@@ -71,7 +72,7 @@ class BaseLogger {
   }
 
   func log(_ items: Any,
-           theOSLog: OSLog = Log.table,
+           theOSLog: OSLog = Log.defaultLog,
            level: LogLevel = .info,
            file: String = #file,
            function: String = #function,
