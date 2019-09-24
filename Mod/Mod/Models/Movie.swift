@@ -49,3 +49,80 @@ struct Movie: Codable, CustomStringConvertible {
   //  }
   // ]
 }
+
+class MovieLoader {
+  static let shared = MovieLoader()
+  private let cache = NSCache<NSString, NSData>()
+  lazy var requestOperationDictionary = [URL: AsynchronousOperation]()
+  
+  lazy var queue: OperationQueue = {
+    var queue = OperationQueue()
+    queue.name = "MovieLoader"
+    queue.maxConcurrentOperationCount = 1
+    queue.qualityOfService = QualityOfService.userInitiated
+    return queue
+  }()
+  
+  func movieDataByURL(_ url: URL, completionHandler: @escaping (_ movies: [Movie], _ url: URL) -> Void) {
+    let request = APIRequest(url: url)
+    func mainThreadCompletionHandler(movies innerMovies: [Movie], _ url: URL) {
+      DispatchQueue.main.async {
+        completionHandler(innerMovies, url)
+      }
+    }
+    let operation = NetworkRequestOperation(request: request) { [weak self] result in
+      guard let self = self else {
+        assertionFailure()
+        return
+      }
+      guard let operation = self.requestOperationDictionary[url] else {
+        mainThreadCompletionHandler(movies: [], url)
+        return
+      }
+      defer {
+        self.requestOperationDictionary.removeValue(forKey: url)
+        operation.completeOperation()
+      }
+      guard operation.isCancelled == false else {
+        // 取消的話就不執行 CompletionHandler
+        for dependenceOp in operation.dependencies {
+          operation.removeDependency(dependenceOp)
+        }
+        return
+      }
+      
+      switch result {
+      case let .success(response):
+        if let data = response.body {
+          do {
+            let movies = try self.parseMovies(data)
+            self.cache.setObject(data as NSData, forKey: url.absoluteString as NSString)
+            mainThreadCompletionHandler(movies: movies, url)
+          } catch {
+            logger.log("Movies Data Format Wrong", level: .error)
+            mainThreadCompletionHandler(movies: [], url)
+          }
+        } else {
+          logger.log("No Data")
+          mainThreadCompletionHandler(movies: [], url)
+        }
+        
+      case .failure:
+        logger.log("failed")
+        mainThreadCompletionHandler(movies: [], url)
+      }
+    }
+    requestOperationDictionary[url] = operation
+    queue.addOperation(operation)
+  }
+  
+  func parseMovies(_ jsonData: Data) throws -> [Movie] {
+    let decoder = JSONDecoder()
+    do {
+      let movies = try decoder.decode([Movie].self, from: jsonData)
+      return movies
+    } catch {
+      throw error
+    }
+  }
+}

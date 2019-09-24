@@ -45,17 +45,12 @@ class MovieCodableTests: XCTestCase {
     }
   ]
 """.data(using: .utf8)!
-      let decoder = JSONDecoder()
+      let movieLoader = MovieLoader.shared
       do {
-        let movies = try decoder.decode([Movie].self, from: json)
-        logger.log("The following movies are available:")
-        for movie in movies {
-          logger.log(movie.description, theOSLog: Log.test, level: .defaultLevel)
-        }
+        _ = try movieLoader.parseMovies(json)
       } catch {
         XCTFail()
       }
-      
     }
 
     func testPerformanceExample() {
