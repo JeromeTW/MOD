@@ -9,10 +9,23 @@
 import UIKit
 
 class MovieTableViewCell: UITableViewCell {
+  static let defaultImage = UIColor.lightGray.image()
+  
   @IBOutlet weak var movieNameLabel: UILabel!
   @IBOutlet weak var movieThumbnailImageView: UIImageView!
   @IBOutlet weak var introdutionLabel: UILabel!
+  @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
+  
   let imageLoader = ImageLoader.shared
+  
+  func reset() {
+    movieNameLabel.text = ""
+    introdutionLabel.text = ""
+    movieThumbnailImageView.contentMode = .scaleToFill
+    movieThumbnailImageView.image = MovieTableViewCell.defaultImage
+    activityIndicator.startAnimating()
+  }
+  
   func updateUI(by movie: Movie) {
     movieNameLabel.text = movie.name
     introdutionLabel.text = movie.introduction
@@ -20,6 +33,7 @@ class MovieTableViewCell: UITableViewCell {
       imageLoader.imageByURL(url) { [weak self] (image, url) in
         guard let self = self else { return }
         if let image = image {
+          self.activityIndicator.stopAnimating()
           self.movieThumbnailImageView.image = image
         }
       }
