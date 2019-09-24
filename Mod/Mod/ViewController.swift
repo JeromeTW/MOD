@@ -21,6 +21,7 @@ class ViewController: UIViewController, Storyboarded, HasJeromeNavigationBar {
   @IBOutlet weak var tableView: UITableView! {
     didSet {
       tableView.dataSource = self
+      tableView.prefetchDataSource = self
       tableView.delegate = self
     }
   }
@@ -34,6 +35,10 @@ class ViewController: UIViewController, Storyboarded, HasJeromeNavigationBar {
     }
   }
   
+  deinit {
+    removeSatusBarHeightChangedObserver()
+  }
+  
   override func viewDidLoad() {
     super.viewDidLoad()
     movieLoader.movieDataByURL { [weak self] movies in
@@ -45,24 +50,43 @@ class ViewController: UIViewController, Storyboarded, HasJeromeNavigationBar {
 }
 
 extension ViewController: UITableViewDataSource {
+  func numberOfSections(in tableView: UITableView) -> Int {
+    logger.log("tableViewnumberOfSections", theOSLog: Log.table, level: .info)
+    return 1
+  }
+  
   func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    logger.log("tableViewnumberOfRowsInSection section: \(section))", theOSLog: Log.table, level: .info)
     return movies.count
   }
   
   func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-    guard let cell = tableView.dequeueReusableCell(withIdentifier: MovieTableViewCell.className) else {
+    logger.log("tableViewcellForRowAt indexPath: \(indexPath))", theOSLog: Log.table, level: .info)
+    guard let movieTableViewCell = tableView.dequeueReusableCell(withIdentifier: MovieTableViewCell.className) as? MovieTableViewCell else {
         return UITableViewCell()
     }
-    return cell
+    movieTableViewCell.reset()
+    movieTableViewCell.updateUI(by: movies[indexPath.row])
+    return movieTableViewCell
   }
 }
 
 extension ViewController: UITableViewDelegate {
   func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-    guard let movieTableViewCell = cell as? MovieTableViewCell else {
-      assertionFailure()
-      return
-    }
-    movieTableViewCell.updateUI(by: movies[indexPath.row])
+    logger.log("tableViewwillDisplaycell indexPath: \(indexPath))", theOSLog: Log.table, level: .info)
+  }
+  
+  func tableView(_ tableView: UITableView, didEndDisplaying cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+    logger.log("tableViewdidEndDisplaying indexPath: \(indexPath))", theOSLog: Log.table, level: .info)
+  }
+}
+
+extension ViewController: UITableViewDataSourcePrefetching {
+  func tableView(_ tableView: UITableView, prefetchRowsAt indexPaths: [IndexPath]) {
+    logger.log("tableViewprefetchRowsAt indexPaths: \(indexPaths))", theOSLog: Log.table, level: .info)
+  }
+
+  func tableView(_ tableView: UITableView, cancelPrefetchingForRowsAt indexPaths: [IndexPath]) {
+    logger.log("tableViewcancelPrefetchingForRowsAt indexPaths: \(indexPaths))", theOSLog: Log.table, level: .info)
   }
 }
