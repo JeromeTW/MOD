@@ -50,7 +50,7 @@ class MovieCodableTests: XCTestCase {
         let movies = try decoder.decode([Movie].self, from: json)
         logger.log("The following movies are available:")
         for movie in movies {
-          logger.log("\(movie.name) \(movie.dateofRemoval)", theOSLog: Log.test, level: .defaultLevel)
+          logger.log(movie.description, theOSLog: Log.test, level: .defaultLevel)
         }
       } catch {
         XCTFail()

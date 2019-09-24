@@ -8,9 +8,10 @@
 
 import Foundation
 
-struct Movie: Codable {
+struct Movie: Codable, CustomStringConvertible {
   var name: String
   var dateofRemoval: String
+  var filePath: String
   var introduction: String
   var actors: String
   var screens: String
@@ -21,12 +22,17 @@ struct Movie: Codable {
   private enum CodingKeys: String, CodingKey {
     case name
     case dateofRemoval
+    case filePath
     case introduction
     case actors
     case screens
     case modID
     case url
     case imageULR
+  }
+  
+  var description: String {
+    return "\n片名： \(name)\n下片日期： \(dateofRemoval)\n簡介： \(introduction)\n演員： \(actors)\n多螢： \(screens)\nID： \(modID)\n連結： \(url)\n圖片： \(imageULR)"
   }
   
   //[
