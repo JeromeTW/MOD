@@ -11,6 +11,7 @@
 		020D16192338F5D60017E7CC /* Movie.swift in Sources */ = {isa = PBXBuildFile; fileRef = 020D16182338F5D60017E7CC /* Movie.swift */; };
 		020D161B2338FC240017E7CC /* MovieCodableTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 020D161A2338FC240017E7CC /* MovieCodableTests.swift */; };
 		020D161C2338FCC20017E7CC /* Movie.swift in Sources */ = {isa = PBXBuildFile; fileRef = 020D16182338F5D60017E7CC /* Movie.swift */; };
+		02334BE723399D9F0062B320 /* MovieTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02334BE623399D9F0062B320 /* MovieTableViewCell.swift */; };
 		026447452327CF6200822485 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 026447442327CF6200822485 /* AppDelegate.swift */; };
 		026447472327CF6200822485 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 026447462327CF6200822485 /* ViewController.swift */; };
 		0264474A2327CF6200822485 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 026447482327CF6200822485 /* Main.storyboard */; };
@@ -62,6 +63,7 @@
 		020D16152338A2B00017E7CC /* BaseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseView.swift; sourceTree = "<group>"; };
 		020D16182338F5D60017E7CC /* Movie.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Movie.swift; sourceTree = "<group>"; };
 		020D161A2338FC240017E7CC /* MovieCodableTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieCodableTests.swift; sourceTree = "<group>"; };
+		02334BE623399D9F0062B320 /* MovieTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieTableViewCell.swift; sourceTree = "<group>"; };
 		026447412327CF6200822485 /* Mod.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Mod.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		026447442327CF6200822485 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		026447462327CF6200822485 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -166,6 +168,7 @@
 				026447442327CF6200822485 /* AppDelegate.swift */,
 				02F9971E23346DF000EE21CA /* MainTabBarController.swift */,
 				026447462327CF6200822485 /* ViewController.swift */,
+				02334BE623399D9F0062B320 /* MovieTableViewCell.swift */,
 				026447482327CF6200822485 /* Main.storyboard */,
 			);
 			path = Mod;
@@ -514,6 +517,7 @@
 				02F9972623346EC500EE21CA /* CoordinatedNavigationController.swift in Sources */,
 				02BEA1D22331D62800C3E317 /* AsynchronousOperation.swift in Sources */,
 				02BEA1C92331D5F700C3E317 /* NSPersistentContainerExtension.swift in Sources */,
+				02334BE723399D9F0062B320 /* MovieTableViewCell.swift in Sources */,
 				02BEA1E62331D64D00C3E317 /* BaseLogger.swift in Sources */,
 				02BEA1E82331D64D00C3E317 /* NSObjectExtension.swift in Sources */,
 				02BEA1E52331D64D00C3E317 /* AdvancedLogger.swift in Sources */,

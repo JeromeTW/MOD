@@ -17,7 +17,7 @@ struct Movie: Codable, CustomStringConvertible {
   var screens: String
   var modID: Int
   var url: String
-  var imageULR: String
+  var imageURL: String
   
   private enum CodingKeys: String, CodingKey {
     case name
@@ -28,11 +28,11 @@ struct Movie: Codable, CustomStringConvertible {
     case screens
     case modID
     case url
-    case imageULR
+    case imageURL = "imageULR"  // JSON 格式拼寫錯誤
   }
   
   var description: String {
-    return "\n片名： \(name)\n下片日期： \(dateofRemoval)\n簡介： \(introduction)\n演員： \(actors)\n多螢： \(screens)\nID： \(modID)\n連結： \(url)\n圖片： \(imageULR)"
+    return "\n片名： \(name)\n下片日期： \(dateofRemoval)\n簡介： \(introduction)\n演員： \(actors)\n多螢： \(screens)\nID： \(modID)\n連結： \(url)\n圖片： \(imageURL)"
   }
   
   //[
@@ -63,11 +63,12 @@ class MovieLoader {
     return queue
   }()
   
-  func movieDataByURL(_ url: URL, completionHandler: @escaping (_ movies: [Movie], _ url: URL) -> Void) {
+  func movieDataByURL(completionHandler: @escaping (_ movies: [Movie]) -> Void) {
+    let url = URL(string: "https://script.google.com/macros/s/AKfycbyBK1R7As34TQk9Ti7jY8h8l0ctJO9ZMk8MW8ZBfVv4PMJ6BECF/exec")!
     let request = APIRequest(url: url)
-    func mainThreadCompletionHandler(movies innerMovies: [Movie], _ url: URL) {
+    func mainThreadCompletionHandler(movies innerMovies: [Movie]) {
       DispatchQueue.main.async {
-        completionHandler(innerMovies, url)
+        completionHandler(innerMovies)
       }
     }
     let operation = NetworkRequestOperation(request: request) { [weak self] result in
@@ -76,7 +77,7 @@ class MovieLoader {
         return
       }
       guard let operation = self.requestOperationDictionary[url] else {
-        mainThreadCompletionHandler(movies: [], url)
+        mainThreadCompletionHandler(movies: [])
         return
       }
       defer {
@@ -97,19 +98,19 @@ class MovieLoader {
           do {
             let movies = try self.parseMovies(data)
             self.cache.setObject(data as NSData, forKey: url.absoluteString as NSString)
-            mainThreadCompletionHandler(movies: movies, url)
+            mainThreadCompletionHandler(movies: movies)
           } catch {
             logger.log("Movies Data Format Wrong", level: .error)
-            mainThreadCompletionHandler(movies: [], url)
+            mainThreadCompletionHandler(movies: [])
           }
         } else {
-          logger.log("No Data")
-          mainThreadCompletionHandler(movies: [], url)
+          logger.log("No Data", level: .error)
+          mainThreadCompletionHandler(movies: [])
         }
         
       case .failure:
-        logger.log("failed")
-        mainThreadCompletionHandler(movies: [], url)
+        logger.log("failed", level: .error)
+        mainThreadCompletionHandler(movies: [])
       }
     }
     requestOperationDictionary[url] = operation

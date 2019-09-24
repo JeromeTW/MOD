@@ -52,6 +52,7 @@ struct Log {
   static let table = OSLog(subsystem: subsystem, category: "table")
   static let networking = OSLog(subsystem: subsystem, category: "networking")
   static let test = OSLog(subsystem: subsystem, category: "test")
+  static let image = OSLog(subsystem: subsystem, category: "image")
 }
 
 class BaseLogger {

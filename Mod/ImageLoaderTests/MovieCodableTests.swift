@@ -47,8 +47,12 @@ class MovieCodableTests: XCTestCase {
 """.data(using: .utf8)!
       let movieLoader = MovieLoader.shared
       do {
-        _ = try movieLoader.parseMovies(json)
+        let movies = try movieLoader.parseMovies(json)
+        for movie in movies {
+          logger.log(movie.description, theOSLog: Log.test, level: .defaultLevel)
+        }
       } catch {
+        logger.log(error.localizedDescription, theOSLog: Log.test, level: .fault)
         XCTFail()
       }
     }
