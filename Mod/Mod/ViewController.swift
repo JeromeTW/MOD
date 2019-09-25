@@ -88,20 +88,20 @@ extension ViewController: UITableViewDelegate {
     imageLoader.queue.isSuspended = true
   }
   
-  func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
-    logger.log("scrollViewDidEndDecelerating", theOSLog: Log.table)
-    loadImagesForOnscreenCells()
-    imageLoader.queue.isSuspended = false
-  }
-  
   func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
     logger.log("scrollViewDidEndDragging decelerate: \(decelerate)", theOSLog: Log.table)
     if decelerate == false {  // 立即停下
-      loadImagesForOnscreenCells()
       imageLoader.queue.isSuspended = false
+      loadImagesForOnscreenCells()
     }
   }
   
+  func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+    logger.log("scrollViewDidEndDecelerating", theOSLog: Log.table)
+    imageLoader.queue.isSuspended = false
+    loadImagesForOnscreenCells()
+  }
+    
   func loadImagesForOnscreenCells() {
     logger.log("tableView.indexPathsForVisibleRows:\(tableView.indexPathsForVisibleRows)", theOSLog: Log.table, level: .fault)
     if let pathsArray = tableView.indexPathsForVisibleRows {

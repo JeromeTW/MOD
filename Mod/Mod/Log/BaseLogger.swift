@@ -9,7 +9,7 @@ enum LogLevel: Int, CustomStringConvertible {
   var description: String {
     switch self {
     case .fault:
-      return "❌ Fatal"
+      return "❌ Fault"
     case .error:
       return "‼️ Error"
     case .debug:
