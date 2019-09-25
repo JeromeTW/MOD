@@ -65,7 +65,6 @@ extension ViewController: UITableViewDataSource {
     guard let movieTableViewCell = tableView.dequeueReusableCell(withIdentifier: MovieTableViewCell.className) as? MovieTableViewCell else {
         return UITableViewCell()
     }
-    movieTableViewCell.reset()
     movieTableViewCell.updateUI(by: movies[indexPath.row])
     return movieTableViewCell
   }
