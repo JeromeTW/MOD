@@ -66,7 +66,7 @@ class AsynchronousOperation: Operation {
 
   override func start() {
     logger.log("start")
-    if isCancelled {
+    guard isCancelled == false else {
       isFinished = true
       return
     }

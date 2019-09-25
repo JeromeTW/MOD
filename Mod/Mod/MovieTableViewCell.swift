@@ -18,8 +18,7 @@ class MovieTableViewCell: UITableViewCell {
   
   let imageLoader = ImageLoader.shared
   
-  override func prepareForReuse() {
-    super.prepareForReuse()
+  func reset() {
     movieNameLabel.text = ""
     introdutionLabel.text = ""
     movieThumbnailImageView.contentMode = .scaleToFill
