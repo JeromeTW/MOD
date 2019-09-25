@@ -30,15 +30,16 @@ class MovieTableViewCell: UITableViewCell {
   func updateUI(by movie: Movie) {
     movieNameLabel.text = movie.name
     introdutionLabel.text = movie.introduction
+    guard imageLoader.queue.isSuspended == false else {return}
     if let url = URL(string: movie.imageURL) {
       imageLoader.imageByURL(url) { [weak self] (image, url) in
         guard let self = self else { return }
-        if let image = image {
+        let nowURL = URL(string: movie.imageURL)!
+        if let image = image, nowURL == url {
           self.activityIndicator.stopAnimating()
           self.movieThumbnailImageView.image = image
         }
       }
     }
   }
-  // TODO: Cancel
 }

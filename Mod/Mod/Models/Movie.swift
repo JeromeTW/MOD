@@ -82,7 +82,6 @@ class MovieLoader {
       }
       defer {
         self.requestOperationDictionary.removeValue(forKey: url)
-        operation.completeOperation()
       }
       guard operation.isCancelled == false else {
         // 取消的話就不執行 CompletionHandler

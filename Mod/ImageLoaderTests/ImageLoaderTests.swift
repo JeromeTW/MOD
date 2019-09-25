@@ -21,39 +21,29 @@ class ImageLoaderTests: XCTestCase {
     // Put teardown code here. This method is called after the invocation of each test method in the class.
   }
 
-  class SypQueue: OperationQueue {
-    var networkOperationFiredCounter = 0
-    override func addOperation(_ op: Operation) {
-      if op is NetworkRequestOperation {
-        networkOperationFiredCounter += 1
-      }
-      super.addOperation(op)
-    }
-  }
-
-  func test_ImageLoader_imageByURL_when_URLExistBefore_doesNotAskQueueShootTwice() { // SypQueue
-    let exp = expectation(description: "Download the same image twice, but request once")
-    let spyQueue = SypQueue()
-    let imageLoader = ImageLoader.shared
-
-    let successfulURL = URL(string: "https://i.ytimg.com/vi/z_xrgqTnM5E/hqdefault.jpg?sqp=-oaymwEiCKgBEF5IWvKriqkDFQgBFQAAAAAYASUAAMhCPQCAokN4AQ==&rs=AOn4CLBTL27i7gGtKmOqugtYG1hhdl8k-Q")!
-    imageLoader.queue = spyQueue
-    // 一次只運行一個 operation，可以控制 operation 完成的順序，所以只在第二個請求完成後下 fulfill
-    imageLoader.queue.maxConcurrentOperationCount = 1
-    imageLoader.imageByURL(successfulURL) { image, _ in
-      if image != nil {
-        logger.log("testImageLoader-1")
-      }
-    }
-    imageLoader.imageByURL(successfulURL) { image, _ in
-      if image != nil {
-        logger.log("testImageLoader-2")
-        XCTAssert(spyQueue.networkOperationFiredCounter < 2)
-        exp.fulfill()
-      }
-    }
-    wait(for: [exp], timeout: 5)
-  }
+//  func test_ImageLoader_imageByURL_when_URLExistBefore_doesNotAskQueueShootTwice() { // SypQueue
+//    let exp = expectation(description: "Download the same image twice, but request once")
+//    let spyQueue = SypQueue()
+//    let imageLoader = ImageLoader.shared
+//
+//    let successfulURL = URL(string: "https://i.ytimg.com/vi/z_xrgqTnM5E/hqdefault.jpg?sqp=-oaymwEiCKgBEF5IWvKriqkDFQgBFQAAAAAYASUAAMhCPQCAokN4AQ==&rs=AOn4CLBTL27i7gGtKmOqugtYG1hhdl8k-Q")!
+//    imageLoader.queue = spyQueue
+//    // 一次只運行一個 operation，可以控制 operation 完成的順序，所以只在第二個請求完成後下 fulfill
+//    imageLoader.queue.maxConcurrentOperationCount = 1
+//    imageLoader.imageByURL(successfulURL) { image, _ in
+//      if image != nil {
+//        logger.log("testImageLoader-1")
+//      }
+//    }
+//    imageLoader.imageByURL(successfulURL) { image, _ in
+//      if image != nil {
+//        logger.log("testImageLoader-2")
+//        XCTAssert(spyQueue.networkOperationFiredCounter < 2)
+//        exp.fulfill()
+//      }
+//    }
+//    wait(for: [exp], timeout: 5)
+//  }
 
   func test_ImageLoader_imageByURL_with_wrongURL() {
     let exp = expectation(description: "Wrong URL")

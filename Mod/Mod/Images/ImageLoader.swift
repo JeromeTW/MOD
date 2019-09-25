@@ -4,16 +4,33 @@
 
 import UIKit
 
-class ImageLoader {
+class SypQueue: OperationQueue {
+  
+  var networkOperationFiredCounter = 0 {
+    didSet {
+      logger.log("networkOperationFiredCounter: \(networkOperationFiredCounter)", theOSLog: Log.image, level: .error)
+    }
+  }
+  
+  override func addOperation(_ op: Operation) {
+    if op is NetworkRequestOperation {
+      networkOperationFiredCounter += 1
+    }
+    super.addOperation(op)
+  }
+}
+
+class ImageLoader: NSObject {
   static let shared = ImageLoader()
   private let imageCache = NSCache<NSString, UIImage>()
   lazy var requestOperationDictionary = [URL: AsynchronousOperation]()
 
-  lazy var queue: OperationQueue = {
-    var queue = OperationQueue()
+  lazy var queue: SypQueue = {
+    var queue = SypQueue()
     queue.name = "ImageLoader"
     queue.maxConcurrentOperationCount = 4
     queue.qualityOfService = QualityOfService.userInitiated
+    queue.addObserver(self, forKeyPath: "operationCount", options: .new, context: nil)
     return queue
   }()
 
@@ -23,26 +40,6 @@ class ImageLoader {
       completionHandler(imageFromCache, url)
       return
     } else {
-      // if no image from cache, get image from url
-      // 檢查是否有重複的下載圖片請求
-      guard requestOperationDictionary[url] == nil else {
-        let prevoiusOperation = requestOperationDictionary[url]!
-        let blockOperation = BlockOperation {
-          DispatchQueue.main.async {
-            [weak self] in
-            guard let self = self else {
-              return
-            }
-            guard let image = self.imageCache.object(forKey: url.absoluteString as NSString) else {
-              fatalError()
-            }
-            completionHandler(image, url)
-          }
-        }
-        blockOperation.addDependency(prevoiusOperation)
-        queue.addOperation(blockOperation)
-        return
-      }
       let request = APIRequest(url: url)
       func mainThreadCompletionHandler(image innerImage: UIImage?, _ url: URL) {
         DispatchQueue.main.async {
@@ -60,7 +57,6 @@ class ImageLoader {
         }
         defer {
           self.requestOperationDictionary.removeValue(forKey: url)
-          operation.completeOperation()
         }
         guard operation.isCancelled == false else {
           // 取消的話就不執行 CompletionHandler
@@ -98,9 +94,18 @@ class ImageLoader {
   func cancelRequest(url: URL) {
     // TODO: cell 不在畫面上時呼叫此函式。
     if let operation = requestOperationDictionary[url] {
-      requestOperationDictionary.removeValue(forKey: url)
-      operation.cancel()
-      operation.completeOperation()
+      if operation.isExecuting == false {
+        requestOperationDictionary.removeValue(forKey: url)
+        operation.cancel()
+      }
     }
+  }
+}
+
+// MARK: - KVO
+
+extension ImageLoader {
+  override func observeValue(forKeyPath _: String?, of _: Any?, change _: [NSKeyValueChangeKey: Any]?, context _: UnsafeMutableRawPointer?) {
+    logger.log("operationCount: \(queue.operationCount)", theOSLog: Log.image, level: .fault)
   }
 }

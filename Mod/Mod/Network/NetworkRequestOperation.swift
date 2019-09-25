@@ -28,7 +28,11 @@ class NetworkRequestOperation: AsynchronousOperation {
 
     request.headers?.forEach { urlRequest.addValue($0.value, forHTTPHeaderField: $0.field) }
 
-    task = session.dataTask(with: urlRequest) { data, response, error in
+    task = session.dataTask(with: urlRequest) { [weak self] data, response, error in
+      guard let self = self else { return }
+      defer {
+        self.completeOperation()
+      }
       if let error = error {
         completionHandler(.failure(.unknown(error: error)))
         return
@@ -46,6 +50,7 @@ class NetworkRequestOperation: AsynchronousOperation {
     logger.log("task.cancel()\n")
     task.cancel()
     super.cancel()
+    completeOperation()
   }
 
   override func main() {

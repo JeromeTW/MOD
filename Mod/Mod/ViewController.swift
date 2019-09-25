@@ -34,6 +34,7 @@ class ViewController: UIViewController, Storyboarded, HasJeromeNavigationBar {
       tableView.reloadData()
     }
   }
+  let imageLoader = ImageLoader.shared
   
   deinit {
     removeSatusBarHeightChangedObserver()
@@ -51,12 +52,12 @@ class ViewController: UIViewController, Storyboarded, HasJeromeNavigationBar {
 
 extension ViewController: UITableViewDataSource {
   func numberOfSections(in tableView: UITableView) -> Int {
-    logger.log("tableViewnumberOfSections", theOSLog: Log.table, level: .info)
+//    logger.log("tableViewnumberOfSections", theOSLog: Log.table, level: .info)
     return 1
   }
   
   func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-    logger.log("tableViewnumberOfRowsInSection section: \(section))", theOSLog: Log.table, level: .info)
+//    logger.log("tableViewnumberOfRowsInSection section: \(section))", theOSLog: Log.table, level: .info)
     return movies.count
   }
   
@@ -72,11 +73,39 @@ extension ViewController: UITableViewDataSource {
 
 extension ViewController: UITableViewDelegate {
   func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-    logger.log("tableViewwillDisplaycell indexPath: \(indexPath))", theOSLog: Log.table, level: .info)
+//    logger.log("tableViewwillDisplaycell indexPath: \(indexPath))", theOSLog: Log.table)
   }
   
   func tableView(_ tableView: UITableView, didEndDisplaying cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-    logger.log("tableViewdidEndDisplaying indexPath: \(indexPath))", theOSLog: Log.table, level: .info)
+//    logger.log("tableViewdidEndDisplaying indexPath: \(indexPath))", theOSLog: Log.table)
+  }
+  
+  // MARK: - scrollview delegate methods
+  
+  func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
+    logger.log("scrollViewWillBeginDragging", theOSLog: Log.table)
+    imageLoader.queue.isSuspended = true
+  }
+  
+  func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+    logger.log("scrollViewDidEndDecelerating", theOSLog: Log.table)
+    loadImagesForOnscreenCells()
+    imageLoader.queue.isSuspended = false
+  }
+  
+  func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
+    logger.log("scrollViewDidEndDragging decelerate: \(decelerate)", theOSLog: Log.table)
+    if decelerate == false {  // 立即停下
+      loadImagesForOnscreenCells()
+      imageLoader.queue.isSuspended = false
+    }
+  }
+  
+  func loadImagesForOnscreenCells() {
+    logger.log("tableView.indexPathsForVisibleRows:\(tableView.indexPathsForVisibleRows)", theOSLog: Log.table, level: .fault)
+    if let pathsArray = tableView.indexPathsForVisibleRows {
+      tableView.reloadRows(at: pathsArray, with: .fade)
+    }
   }
 }
 
