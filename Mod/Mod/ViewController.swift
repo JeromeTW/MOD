@@ -103,9 +103,39 @@ extension ViewController: UITableViewDelegate {
   }
     
   func loadImagesForOnscreenCells() {
-    logger.log("tableView.indexPathsForVisibleRows:\(tableView.indexPathsForVisibleRows)", theOSLog: Log.table, level: .fault)
+//    logger.log("tableView.indexPathsForVisibleRows:\(tableView.indexPathsForVisibleRows)", theOSLog: Log.table, level: .fault)
     if let pathsArray = tableView.indexPathsForVisibleRows {
-      tableView.reloadRows(at: pathsArray, with: .fade)
+      let allPendingOperations = Set(Array(imageLoader.requestOperationDictionary.keys))
+      var toBeCancelled = allPendingOperations
+      
+      var visiblePaths = Set<URL>()
+      for indexPath in pathsArray {
+        if let url = URL(string: movies[indexPath.row].imageURL) {
+          visiblePaths.insert(url)
+        }
+      }
+      toBeCancelled.subtract(visiblePaths)
+      
+      var toBeStarted = visiblePaths
+      toBeStarted.subtract(allPendingOperations)
+      
+      for url in toBeCancelled {
+        imageLoader.cancelRequest(url: url)
+      }
+      
+      var needToReroadData = false
+      guard let cells = tableView.visibleCells as? [MovieTableViewCell] else {
+        assertionFailure()
+        return
+      }
+      
+      for cell in cells where cell.movieThumbnailImageView.image != MovieTableViewCell.defaultImage {
+        needToReroadData = true
+        break
+      }
+      if needToReroadData {
+        tableView.reloadData()
+      }
     }
   }
 }

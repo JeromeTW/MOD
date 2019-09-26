@@ -52,7 +52,7 @@ class MovieCodableTests: XCTestCase {
           logger.log(movie.description, theOSLog: Log.test, level: .defaultLevel)
         }
       } catch {
-        logger.log(error.localizedDescription, theOSLog: Log.test, level: .fault)
+        logger.log(error.localizedDescription, theOSLog: Log.test)
         XCTFail()
       }
     }

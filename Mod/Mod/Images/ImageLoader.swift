@@ -119,6 +119,6 @@ class ImageLoader: NSObject {
 
 extension ImageLoader {
   override func observeValue(forKeyPath _: String?, of _: Any?, change _: [NSKeyValueChangeKey: Any]?, context _: UnsafeMutableRawPointer?) {
-    logger.log("operationCount: \(queue.operationCount)", theOSLog: Log.image, level: .fault)
+    logger.log("operationCount: \(queue.operationCount)", theOSLog: Log.image)
   }
 }

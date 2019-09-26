@@ -32,10 +32,6 @@ class MovieTableViewCell: UITableViewCell {
   func updateUI(by movie: Movie) {
     movieNameLabel.text = movie.name
     introdutionLabel.text = movie.introduction
-    guard imageLoader.queue.isSuspended == false else {
-      logger.log("queue.isSuspended == true")
-      return
-    }
     if let url = URL(string: movie.imageURL) {
       let issuedIdentifier = imageLoader.next()
       taskID = issuedIdentifier
