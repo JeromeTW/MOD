@@ -16,6 +16,8 @@ class MovieTableViewCell: UITableViewCell {
   @IBOutlet weak var introdutionLabel: UILabel!
   @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
   
+  var taskID: UInt?
+  
   let imageLoader = ImageLoader.shared
   
   func reset() {
@@ -24,6 +26,7 @@ class MovieTableViewCell: UITableViewCell {
     movieThumbnailImageView.contentMode = .scaleToFill
     movieThumbnailImageView.image = MovieTableViewCell.defaultImage
     activityIndicator.startAnimating()
+    taskID = nil
   }
   
   func updateUI(by movie: Movie) {
@@ -34,10 +37,12 @@ class MovieTableViewCell: UITableViewCell {
       return
     }
     if let url = URL(string: movie.imageURL) {
+      let issuedIdentifier = imageLoader.next()
+      taskID = issuedIdentifier
       imageLoader.imageByURL(url) { [weak self] (image, url) in
         guard let self = self else { return }
-        let nowURL = URL(string: movie.imageURL)!
-        if let image = image, nowURL == url {
+        if let image = image, issuedIdentifier == self.taskID {
+          self.taskID = nil
           self.activityIndicator.stopAnimating()
           self.movieThumbnailImageView.image = image
         }

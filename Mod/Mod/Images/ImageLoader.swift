@@ -24,7 +24,21 @@ class ImageLoader: NSObject {
   static let shared = ImageLoader()
   private let imageCache = NSCache<NSString, UIImage>()
   lazy var requestOperationDictionary = [URL: AsynchronousOperation]()
-
+  var current: UInt = 0
+  
+  func synchronized(_ lock: AnyObject, _ closure: () -> Void) {
+    objc_sync_enter(lock)
+    closure()
+    objc_sync_exit(lock)
+  }
+  
+  func next() -> UInt {
+    synchronized(self) {
+      current += 1
+    }
+    return current
+  }
+  
   lazy var queue: SypQueue = {
     var queue = SypQueue()
     queue.name = "ImageLoader"

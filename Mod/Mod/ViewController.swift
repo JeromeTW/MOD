@@ -21,7 +21,7 @@ class ViewController: UIViewController, Storyboarded, HasJeromeNavigationBar {
   @IBOutlet weak var tableView: UITableView! {
     didSet {
       tableView.dataSource = self
-      tableView.prefetchDataSource = self
+//      tableView.prefetchDataSource = self
       tableView.delegate = self
     }
   }
