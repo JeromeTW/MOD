@@ -8,7 +8,7 @@ class SypQueue: OperationQueue {
   
   var networkOperationFiredCounter = 0 {
     didSet {
-      logger.log("networkOperationFiredCounter: \(networkOperationFiredCounter)", theOSLog: Log.image, level: .error)
+      logger.log("networkOperationFiredCounter: \(networkOperationFiredCounter)", theOSLog: Log.image)
     }
   }
   

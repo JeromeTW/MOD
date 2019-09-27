@@ -59,6 +59,7 @@ struct Log {
 class BaseLogger {
   // MARK: - Properties
 
+  private(set) var logLevels = [LogLevel]()
   private(set) var shouldShow = false
   private(set) var shouldCache = false
 
@@ -66,29 +67,32 @@ class BaseLogger {
 
   // MARK: - Public method
 
-  func configure(shouldShow: Bool = false, shouldCache: Bool = false) {
+  func configure(_ logLevels: [LogLevel], shouldShow: Bool = false, shouldCache: Bool = false) {
+    self.logLevels = logLevels
     self.shouldShow = shouldShow
     self.shouldCache = shouldCache
   }
 
   func log(_ items: Any,
            theOSLog: OSLog = Log.defaultLog,
-           level: LogLevel = .info,
+           level: LogLevel = .defaultLevel,
            file: String = #file,
            function: String = #function,
            line: Int = #line) {
     #if DEBUG
-      let fileName = file.components(separatedBy: "/").last?.components(separatedBy: ".").first ?? ""
-      let logString = "⭐️ [\(level.description)] [\(fileName).\(function):\(line)] > \(items)"
+      if logLevels.contains(level) {
+        let fileName = file.components(separatedBy: "/").last?.components(separatedBy: ".").first ?? ""
+        let logString = "⭐️ [\(level.description)] [\(fileName).\(function):\(line)] > \(items)"
 
-      os_log("%@", log: theOSLog, type: level.theOSLogType, logString)
+        os_log("%@", log: theOSLog, type: level.theOSLogType, logString)
 
-      if shouldShow {
-        show(logString)
-      }
+        if shouldShow {
+          show(logString)
+        }
 
-      if shouldCache {
-        cache(logString)
+        if shouldCache {
+          cache(logString)
+        }
       }
     #endif
   }

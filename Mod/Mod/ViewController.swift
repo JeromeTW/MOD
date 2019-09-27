@@ -97,17 +97,17 @@ class ViewController: UIViewController, Storyboarded, HasJeromeNavigationBar {
 
 extension ViewController: UITableViewDataSource {
   func numberOfSections(in tableView: UITableView) -> Int {
-//    logger.log("tableViewnumberOfSections", theOSLog: Log.table, level: .info)
+    logger.log("tableViewnumberOfSections", theOSLog: Log.table)
     return 1
   }
   
   func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-//    logger.log("tableViewnumberOfRowsInSection section: \(section))", theOSLog: Log.table, level: .info)
+    logger.log("tableViewnumberOfRowsInSection section: \(section))", theOSLog: Log.table)
     return displayedMovies.count
   }
   
   func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-    logger.log("tableViewcellForRowAt indexPath: \(indexPath))", theOSLog: Log.table, level: .info)
+    logger.log("tableViewcellForRowAt indexPath: \(indexPath))", theOSLog: Log.table)
     guard let movieTableViewCell = tableView.dequeueReusableCell(withIdentifier: MovieTableViewCell.className) as? MovieTableViewCell else {
         return UITableViewCell()
     }
@@ -119,11 +119,11 @@ extension ViewController: UITableViewDataSource {
 
 extension ViewController: UITableViewDelegate {
   func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-//    logger.log("tableViewwillDisplaycell indexPath: \(indexPath))", theOSLog: Log.table)
+    logger.log("tableViewwillDisplaycell indexPath: \(indexPath))", theOSLog: Log.table)
   }
   
   func tableView(_ tableView: UITableView, didEndDisplaying cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-//    logger.log("tableViewdidEndDisplaying indexPath: \(indexPath))", theOSLog: Log.table)
+    logger.log("tableViewdidEndDisplaying indexPath: \(indexPath))", theOSLog: Log.table)
   }
   
   // MARK: - scrollview delegate methods
@@ -187,11 +187,11 @@ extension ViewController: UITableViewDelegate {
 
 extension ViewController: UITableViewDataSourcePrefetching {
   func tableView(_ tableView: UITableView, prefetchRowsAt indexPaths: [IndexPath]) {
-    logger.log("tableViewprefetchRowsAt indexPaths: \(indexPaths))", theOSLog: Log.table, level: .info)
+    logger.log("tableViewprefetchRowsAt indexPaths: \(indexPaths))", theOSLog: Log.table)
   }
 
   func tableView(_ tableView: UITableView, cancelPrefetchingForRowsAt indexPaths: [IndexPath]) {
-    logger.log("tableViewcancelPrefetchingForRowsAt indexPaths: \(indexPaths))", theOSLog: Log.table, level: .info)
+    logger.log("tableViewcancelPrefetchingForRowsAt indexPaths: \(indexPaths))", theOSLog: Log.table)
   }
 }
 
