@@ -54,6 +54,12 @@ class ImageLoader: NSObject {
       completionHandler(imageFromCache, url)
       return
     } else {
+      // 檢查是否有重複的下載圖片請求
+      if let prevoiusOperation = requestOperationDictionary[url] {
+        logger.log("重複請求: \(url)", theOSLog: .network, level: .error)
+//        repeatRequiresHandler(url: url)
+      }
+      
       let request = APIRequest(url: url)
       func mainThreadCompletionHandler(image innerImage: UIImage?, _ url: URL) {
         DispatchQueue.main.async {
@@ -113,6 +119,27 @@ class ImageLoader: NSObject {
       }
     }
   }
+  
+//  private func repeatRequiresHandler(url: URL) {
+//    guard requestOperationDictionary[url] == nil else {
+//      let prevoiusOperation = requestOperationDictionary[url]!
+//      let blockOperation = BlockOperation {
+//        DispatchQueue.main.async {
+//          [weak self] in
+//          guard let self = self else {
+//            return
+//          }
+//          guard let image = self.imageCache.object(forKey: url.absoluteString as NSString) else {
+//            fatalError()
+//          }
+//          completionHandler(image, url)
+//        }
+//      }
+//      blockOperation.addDependency(prevoiusOperation)
+//      queue.addOperation(blockOperation)
+//      return
+//    }
+//  }
 }
 
 // MARK: - KVO
