@@ -46,14 +46,24 @@ enum LogLevel: Int, CustomStringConvertible {
   let logger = AdvancedLogger() // APP Target 用這個，此包含 UI 和 Log 檔案儲存。
 #endif
 
-struct Log {
-  // TODO: 根據需要進行修改。
+
+enum JeOSLog {
   static let subsystem = "me.jerome.Mod"
-  static let table = OSLog(subsystem: subsystem, category: "table")
-  static let networking = OSLog(subsystem: subsystem, category: "networking")
-  static let test = OSLog(subsystem: subsystem, category: "test")
-  static let image = OSLog(subsystem: subsystem, category: "image")
-  static let defaultLog = OSLog(subsystem: subsystem, category: "default")
+  case defaultLog, table, network, test, image
+  var osLog: OSLog {
+    switch self {
+    case .table:
+      return OSLog(subsystem: JeOSLog.subsystem, category: "table")
+    case .defaultLog:
+      return OSLog(subsystem: JeOSLog.subsystem, category: "default")
+    case .network:
+      return OSLog(subsystem: JeOSLog.subsystem, category: "network")
+    case .test:
+      return OSLog(subsystem: JeOSLog.subsystem, category: "test")
+    case .image:
+      return OSLog(subsystem: JeOSLog.subsystem, category: "image")
+    }
+  }
 }
 
 class BaseLogger {
@@ -74,7 +84,7 @@ class BaseLogger {
   }
 
   func log(_ items: Any,
-           theOSLog: OSLog = Log.defaultLog,
+           theOSLog: JeOSLog = JeOSLog.defaultLog,
            level: LogLevel = .defaultLevel,
            file: String = #file,
            function: String = #function,
@@ -84,7 +94,7 @@ class BaseLogger {
         let fileName = file.components(separatedBy: "/").last?.components(separatedBy: ".").first ?? ""
         let logString = "⭐️ [\(level.description)] [\(fileName).\(function):\(line)] > \(items)"
 
-        os_log("%@", log: theOSLog, type: level.theOSLogType, logString)
+        os_log("%@", log: theOSLog.osLog, type: level.theOSLogType, logString)
 
         if shouldShow {
           show(logString)

@@ -8,7 +8,7 @@ class SypQueue: OperationQueue {
   
   var networkOperationFiredCounter = 0 {
     didSet {
-      logger.log("networkOperationFiredCounter: \(networkOperationFiredCounter)", theOSLog: Log.image)
+      logger.log("networkOperationFiredCounter: \(networkOperationFiredCounter)", theOSLog: .image)
     }
   }
   
@@ -93,16 +93,16 @@ class ImageLoader: NSObject {
               self.imageCache.setObject(image, forKey: url.absoluteString as NSString)
               mainThreadCompletionHandler(image: image, url)
             } else {
-              logger.log("Data Format Wrong", theOSLog: Log.image, level: .error)
+              logger.log("Data Format Wrong", theOSLog: .image, level: .error)
               mainThreadCompletionHandler(image: nil, url)
             }
           } else {
-            logger.log("No Data", theOSLog: Log.image, level: .error)
+            logger.log("No Data", theOSLog: .image, level: .error)
             mainThreadCompletionHandler(image: nil, url)
           }
 
         case let .failure(error):
-          logger.log(error.localizedDescription, theOSLog: Log.image, level: .error)
+          logger.log(error.localizedDescription, theOSLog: .image, level: .error)
           mainThreadCompletionHandler(image: nil, url)
         }
       }
@@ -146,6 +146,6 @@ class ImageLoader: NSObject {
 
 extension ImageLoader {
   override func observeValue(forKeyPath _: String?, of _: Any?, change _: [NSKeyValueChangeKey: Any]?, context _: UnsafeMutableRawPointer?) {
-    logger.log("operationCount: \(queue.operationCount)", theOSLog: Log.image)
+    logger.log("operationCount: \(queue.operationCount)", theOSLog: .image)
   }
 }

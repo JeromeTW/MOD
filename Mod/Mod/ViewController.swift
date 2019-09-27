@@ -97,17 +97,17 @@ class ViewController: UIViewController, Storyboarded, HasJeromeNavigationBar {
 
 extension ViewController: UITableViewDataSource {
   func numberOfSections(in tableView: UITableView) -> Int {
-    logger.log("tableViewnumberOfSections", theOSLog: Log.table)
+    logger.log("tableViewnumberOfSections", theOSLog: .table)
     return 1
   }
   
   func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-    logger.log("tableViewnumberOfRowsInSection section: \(section))", theOSLog: Log.table)
+    logger.log("tableViewnumberOfRowsInSection section: \(section))", theOSLog: .table)
     return displayedMovies.count
   }
   
   func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-    logger.log("tableViewcellForRowAt indexPath: \(indexPath))", theOSLog: Log.table)
+    logger.log("tableViewcellForRowAt indexPath: \(indexPath))", theOSLog: .table)
     guard let movieTableViewCell = tableView.dequeueReusableCell(withIdentifier: MovieTableViewCell.className) as? MovieTableViewCell else {
         return UITableViewCell()
     }
@@ -119,22 +119,22 @@ extension ViewController: UITableViewDataSource {
 
 extension ViewController: UITableViewDelegate {
   func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-    logger.log("tableViewwillDisplaycell indexPath: \(indexPath))", theOSLog: Log.table)
+    logger.log("tableViewwillDisplaycell indexPath: \(indexPath))", theOSLog: .table)
   }
   
   func tableView(_ tableView: UITableView, didEndDisplaying cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-    logger.log("tableViewdidEndDisplaying indexPath: \(indexPath))", theOSLog: Log.table)
+    logger.log("tableViewdidEndDisplaying indexPath: \(indexPath))", theOSLog: .table)
   }
   
   // MARK: - scrollview delegate methods
   
   func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
-    logger.log("scrollViewWillBeginDragging", theOSLog: Log.table)
+    logger.log("scrollViewWillBeginDragging", theOSLog: .table)
     imageLoader.queue.isSuspended = true
   }
   
   func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
-    logger.log("scrollViewDidEndDragging decelerate: \(decelerate)", theOSLog: Log.table)
+    logger.log("scrollViewDidEndDragging decelerate: \(decelerate)", theOSLog: .table)
     if decelerate == false {  // 立即停下
       imageLoader.queue.isSuspended = false
       loadImagesForOnscreenCells()
@@ -142,13 +142,13 @@ extension ViewController: UITableViewDelegate {
   }
   
   func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
-    logger.log("scrollViewDidEndDecelerating", theOSLog: Log.table)
+    logger.log("scrollViewDidEndDecelerating", theOSLog: .table)
     imageLoader.queue.isSuspended = false
     loadImagesForOnscreenCells()
   }
     
   func loadImagesForOnscreenCells() {
-//    logger.log("tableView.indexPathsForVisibleRows:\(tableView.indexPathsForVisibleRows)", theOSLog: Log.table, level: .fault)
+//    logger.log("tableView.indexPathsForVisibleRows:\(tableView.indexPathsForVisibleRows)", theOSLog: .table, level: .fault)
     if let pathsArray = tableView.indexPathsForVisibleRows {
       let allPendingOperations = Set(Array(imageLoader.requestOperationDictionary.keys))
       var toBeCancelled = allPendingOperations
@@ -187,11 +187,11 @@ extension ViewController: UITableViewDelegate {
 
 extension ViewController: UITableViewDataSourcePrefetching {
   func tableView(_ tableView: UITableView, prefetchRowsAt indexPaths: [IndexPath]) {
-    logger.log("tableViewprefetchRowsAt indexPaths: \(indexPaths))", theOSLog: Log.table)
+    logger.log("tableViewprefetchRowsAt indexPaths: \(indexPaths))", theOSLog: .table)
   }
 
   func tableView(_ tableView: UITableView, cancelPrefetchingForRowsAt indexPaths: [IndexPath]) {
-    logger.log("tableViewcancelPrefetchingForRowsAt indexPaths: \(indexPaths))", theOSLog: Log.table)
+    logger.log("tableViewcancelPrefetchingForRowsAt indexPaths: \(indexPaths))", theOSLog: .table)
   }
 }
 
