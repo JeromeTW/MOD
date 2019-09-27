@@ -17,7 +17,34 @@ class ViewController: UIViewController, Storyboarded, HasJeromeNavigationBar {
     }
   }
   @IBOutlet weak var searchBarView: UIView!
-  @IBOutlet weak var searchBar: UISearchBar!
+  @IBOutlet weak var searchBar: UISearchBar! {
+    didSet {
+      searchBar.backgroundColor = .white
+      searchBar.backgroundImage = UIImage()
+      searchBar.barTintColor = .white
+      if let searchField = searchBar.value(forKey: "searchField") as? UITextField {
+        searchField.backgroundColor = .white
+        searchField.layer.cornerRadius = 14.0
+        searchField.layer.borderColor = UIColor(red: 247/255.0, green: 75/255.0, blue: 31/255.0, alpha: 1).cgColor
+        searchField.layer.borderWidth = 1
+        searchField.layer.masksToBounds = true
+        searchField.tintColor = UIColor.red
+      }
+      
+      let barBtnProxies = UIBarButtonItem.appearance(whenContainedInInstancesOf: [UISearchBar.self])
+      barBtnProxies.title = "cancel"
+      
+      let textFieldProxies = UITextField.appearance(whenContainedInInstancesOf: [UISearchBar.self])
+      textFieldProxies.textColor = .black
+      textFieldProxies.font = UIFont.systemFont(ofSize: 14)
+      
+      searchBar.tintColor = UIColor.red
+      
+      //delegate
+      searchBar.delegate = self
+    }
+  }
+  
   @IBOutlet weak var tableView: UITableView! {
     didSet {
       tableView.dataSource = self
@@ -29,12 +56,30 @@ class ViewController: UIViewController, Storyboarded, HasJeromeNavigationBar {
   var observer: NSObjectProtocol?
   weak var movieCoordinator: MovieCoordinator?
   let movieLoader = MovieLoader.shared
-  var movies = [Movie]() {
+  private var movies = [Movie]() {
     didSet {
       tableView.reloadData()
     }
   }
+  private var filterMovies = [Movie]() {
+    didSet {
+      tableView.reloadData()
+    }
+  }
+  
+  var displayedMovies: [Movie] {
+    if isOnSearching {
+      return filterMovies
+    } else {
+      return movies
+    }
+  }
+  
   let imageLoader = ImageLoader.shared
+  
+  var isOnSearching: Bool {
+    return searchBar.isFirstResponder == true && searchBar.text != ""
+  }
   
   deinit {
     removeSatusBarHeightChangedObserver()
@@ -58,7 +103,7 @@ extension ViewController: UITableViewDataSource {
   
   func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
 //    logger.log("tableViewnumberOfRowsInSection section: \(section))", theOSLog: Log.table, level: .info)
-    return movies.count
+    return displayedMovies.count
   }
   
   func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -67,7 +112,7 @@ extension ViewController: UITableViewDataSource {
         return UITableViewCell()
     }
     movieTableViewCell.reset()
-    movieTableViewCell.updateUI(by: movies[indexPath.row])
+    movieTableViewCell.updateUI(by: displayedMovies[indexPath.row])
     return movieTableViewCell
   }
 }
@@ -110,7 +155,7 @@ extension ViewController: UITableViewDelegate {
       
       var visiblePaths = Set<URL>()
       for indexPath in pathsArray {
-        if let url = URL(string: movies[indexPath.row].imageURL) {
+        if let url = URL(string: displayedMovies[indexPath.row].imageURL) {
           visiblePaths.insert(url)
         }
       }
@@ -147,5 +192,37 @@ extension ViewController: UITableViewDataSourcePrefetching {
 
   func tableView(_ tableView: UITableView, cancelPrefetchingForRowsAt indexPaths: [IndexPath]) {
     logger.log("tableViewcancelPrefetchingForRowsAt indexPaths: \(indexPaths))", theOSLog: Log.table, level: .info)
+  }
+}
+
+// MARK: - UISearchBarDelegate
+extension ViewController: UISearchBarDelegate {
+  func searchBarShouldBeginEditing(_ searchBar: UISearchBar) -> Bool {
+    logger.log("searchBarShouldBeginEditing", level: .debug)
+    return true
+  }
+  
+  func searchBarShouldEndEditing(_ searchBar: UISearchBar) -> Bool {
+    logger.log("searchBarShouldEndEditing", level: .debug)
+    return true
+  }
+  
+  func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+    logger.log("searchBarCancelButtonClicked", level: .debug)
+  }
+  
+  func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+    logger.log("searchBartextDidChange", level: .debug)
+    guard let searchText = searchBar.text else {
+      return
+    }
+    
+    logger.log("搜尋符合文字# \(searchText) #的檔案", level: .debug)
+    // Update the filtered array based on the search text.
+    filterMovies = movies.filter({ movie -> Bool in
+      let lowercasedSearchText = searchText.lowercased()
+      return movie.name.lowercased().contains(lowercasedSearchText) || movie.introduction.lowercased().contains(lowercasedSearchText) || movie.actors.lowercased().contains(lowercasedSearchText)
+    })
+    tableView.reloadData()
   }
 }
